@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Loan;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class LoanSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,9 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call('UserSeeder');
-        $this->call('AuthorSeeder');
-        $this->call('BookSeeder');
-        $this->call('LoanSeeder');
+        // Criar 800 empréstimos com a factory
+        Loan::factory(800)->create();
     }
 }
