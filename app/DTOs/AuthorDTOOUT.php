@@ -24,4 +24,12 @@ readonly class AuthorDTOOUT
             'date_birth' => $this->dateBirth,
         ];
     }
+
+    public function getAuthor(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
+    }
 }

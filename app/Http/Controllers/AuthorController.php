@@ -44,7 +44,7 @@ class AuthorController extends Controller
 
         $this->service->createAuthor($authorDTO);
 
-        return response()->json([], Response::HTTP_OK);
+        return response()->json([], Response::HTTP_CREATED);
     }
 
     public function show(int $id)

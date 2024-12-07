@@ -35,6 +35,6 @@ class Author extends Model
      // One-to-many relationship: An author can have many books
     public function books()
     {
-        return $this->hasMany(Book::class);
+        return $this->hasMany(Book::class, 'author_id', 'id');
     }
 }

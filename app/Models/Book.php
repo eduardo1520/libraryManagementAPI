@@ -21,10 +21,13 @@ class Book extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+
+
     // Many-to-one relationship: A book belongs to one author
     public function author()
     {
-        return $this->belongsTo(Author::class);
+        return $this->belongsTo(Author::class, 'author_id', 'id');
     }
 
     // One-to-many relationship: A book can have many loans
