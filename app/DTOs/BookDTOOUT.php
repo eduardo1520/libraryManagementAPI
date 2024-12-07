@@ -20,4 +20,12 @@ readonly class BookDTOOUT
             'author' => $this->author->getAuthor()
         ];
     }
+
+    public function getBook(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+        ];
+    }
 }

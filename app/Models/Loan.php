@@ -21,15 +21,17 @@ class Loan extends Model
 
     protected $dates = ['deleted_at'];
 
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
+
     // Many-to-one relationship: A loan belongs to one user
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     // Many-to-one relationship: A loan belongs to one book
     public function book()
     {
-        return $this->belongsTo(Book::class);
+        return $this->belongsTo(Book::class, 'book_id', 'id');
     }
 }

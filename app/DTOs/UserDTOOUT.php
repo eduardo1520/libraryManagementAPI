@@ -2,20 +2,19 @@
 
 namespace App\DTOs;
 
-use Carbon\Carbon;
-
-readonly class AuthorCreateDTOIN
+readonly class UserDTOOUT
 {
     public function __construct(
-          public string $name,
-          public Carbon $dateBirth
+        public int $id,
+        public string $name,
     ) {}
 
     public function toArray(): array
     {
         return [
+            'id' => $this->id,
             'name' => $this->name,
-            'date_birth' => $this->dateBirth->format('Y-m-d'),
         ];
     }
+
 }

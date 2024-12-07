@@ -19,5 +19,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->put("books/{id}", 'BookController@update');
     $router->delete("books/{id}", 'BookController@destroy');
 
-    // Helper::resourceRoute($router, 'loans'  , 'App\Http\Controllers\LoanController');
+    $router->get('loans', 'LoanController@index');
+    $router->get("loans/{id}", 'LoanController@show');
+    $router->post("loans", 'LoanController@store');
+    $router->put("loans/{id}", 'LoanController@update');
+    $router->delete("loans/{id}", 'LoanController@destroy');
+
 });
