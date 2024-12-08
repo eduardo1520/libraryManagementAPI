@@ -103,6 +103,10 @@ $app->configure('app');
 $app->register(SailServiceProvider::class);
 $app->register(LumenGeneratorServiceProvider::class);
 $app->register(BeyondCode\ErdGenerator\ErdGeneratorServiceProvider::class);
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+
+$app->configure('mail');
+
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes

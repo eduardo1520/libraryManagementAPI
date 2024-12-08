@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTOs\AuthorDTOIN;
 use App\DTOs\AuthorDTOOUT;
 use App\DTOs\BookDTOOUT;
+use App\DTOs\LoanCreateDTOIN;
 use App\DTOs\LoanDTOIN;
 use App\DTOs\LoanDTOOUT;
 use App\DTOs\UserDTOOUT;
@@ -36,7 +37,25 @@ class LoanController extends Controller
 
     public function store(Request $request)
     {
-        // Lógica para armazenar um novo livro.
+        $loanDate = Carbon::createFromFormat('d/m/Y', $request->loan_date);
+        $loanReturnDate = Carbon::createFromFormat('d/m/Y', $request->return_date);
+
+        $validationError = LoanRequest::validateCreate($request->all());
+
+        if ($validationError) {
+            return response()->json(['error' => $validationError], Response::HTTP_BAD_REQUEST);
+        }
+
+        $loanCreateDTOIN = new LoanCreateDTOIN(
+            $request->user_id,
+            $request->book_id,
+            $loanDate,
+            $loanReturnDate
+        );
+
+        $this->service->createLoan($loanCreateDTOIN);
+
+        return response()->json([], Response::HTTP_CREATED);
     }
 
     public function show($id)
@@ -95,13 +114,18 @@ class LoanController extends Controller
         return response()->json(["data" => $loanDTOOUT->toArray()], Response::HTTP_OK);
     }
 
-    public function update(Request $request, $id)
-    {
-        // Lógica para atualizar um livro existente.
-    }
-
     public function destroy($id)
     {
-        // Lógica para excluir um livro.
+        $validationError = LoanRequest::validateId($id);
+
+        if ($validationError) {
+            return response()->json(['error' => $validationError], Response::HTTP_BAD_REQUEST);
+        }
+
+        $loanDTO = new LoanDTOIN($id);
+
+        $this->service->deleteLoan($loanDTO);
+
+        return response()->json([], Response::HTTP_NO_CONTENT);
     }
 }

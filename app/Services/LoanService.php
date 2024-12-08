@@ -25,7 +25,7 @@ class LoanService
         return $this->repository->findById($LoanDTOIN->id);
     }
 
-    public function createBook(LoanCreateDTOIN $LoanCreateDTOIN)
+    public function createLoan(LoanCreateDTOIN $LoanCreateDTOIN)
     {
         return $this->repository->create($LoanCreateDTOIN->toArray());
     }
