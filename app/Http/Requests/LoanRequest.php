@@ -27,7 +27,7 @@ class LoanRequest
         $validator = Validator::make(
             $data,
             [
-                'author_id'   => 'required|integer|exists:authors,id',
+                'user_id'   => 'required|integer|exists:users,id',
                 'book_id'     => 'required|integer|exists:books,id',
                 'loan_date'   => 'required|date',
                 'return_date' => 'required|date',
