@@ -54,6 +54,19 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+// $app->singleton(Redis::class, function ($app) {
+//     return new RedisManager($app, 'redis', config('database')['connections']['redis']);
+// });
+
+// $app->bind(RedisManager::class, function($app) {
+//     $config = config('database')['connections']['redis'];
+//     return new RedisManager($app, 'redis', $config);
+// });
+
+$app->singleton('redis.config', function () {
+    return config('database')['connections']['redis'];
+});
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -66,7 +79,8 @@ $app->singleton(
 */
 
 $app->configure('app');
-
+$app->configure('queue');
+$app->configure('database');
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -104,6 +118,8 @@ $app->register(SailServiceProvider::class);
 $app->register(LumenGeneratorServiceProvider::class);
 $app->register(BeyondCode\ErdGenerator\ErdGeneratorServiceProvider::class);
 $app->register(Illuminate\Mail\MailServiceProvider::class);
+$app->register(Illuminate\Queue\QueueServiceProvider::class);
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 
 $app->configure('mail');
 

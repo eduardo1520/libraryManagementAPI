@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\DTOs\LoanCreateDTOIN;
 use App\DTOs\LoanDTOIN;
+use App\Jobs\SendLoanEmail;
 use App\Repositories\Eloquent\LoanRepository;
+use Illuminate\Support\Facades\Log;
 
 class LoanService
 {
@@ -27,7 +29,17 @@ class LoanService
 
     public function createLoan(LoanCreateDTOIN $LoanCreateDTOIN)
     {
-        return $this->repository->create($LoanCreateDTOIN->toArray());
+        $loan = $this->repository->create($LoanCreateDTOIN->toArray());
+
+        if (!$loan) {
+            return false;
+        }
+
+        $user = $loan->user;
+
+        $loanDetails = $LoanCreateDTOIN->toArray();
+
+        dispatch(new SendLoanEmail($user, $loanDetails));
     }
 
     public function updateLoan(LoanDTOIN $LoanDTOIN, array $data)
