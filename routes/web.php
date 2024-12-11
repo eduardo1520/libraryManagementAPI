@@ -6,6 +6,8 @@ $router->get('/', function () use ($router) {
     return response()->json(['message' => 'Hello Lumen'. $router->app->version()]);
 });
 
+$router->post('/autenticate', 'UserController@authenticate');
+
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('authors', 'AuthorController@index');
     $router->get("authors/{id}", 'AuthorController@show');

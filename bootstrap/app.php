@@ -54,19 +54,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-// $app->singleton(Redis::class, function ($app) {
-//     return new RedisManager($app, 'redis', config('database')['connections']['redis']);
-// });
-
-// $app->bind(RedisManager::class, function($app) {
-//     $config = config('database')['connections']['redis'];
-//     return new RedisManager($app, 'redis', $config);
-// });
-
-$app->singleton('redis.config', function () {
-    return config('database')['connections']['redis'];
-});
-
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
