@@ -44,6 +44,6 @@ class UserController extends Controller
 
         $jwt = JWT::encode($payload, env('JWT_SECRET'), 'HS256');
 
-        return response()->json(['token' => $jwt], Response::HTTP_CREATED);
+        return response()->json(['data' => $jwt], Response::HTTP_CREATED);
     }
 }
