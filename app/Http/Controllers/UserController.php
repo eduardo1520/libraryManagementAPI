@@ -36,7 +36,7 @@ class UserController extends Controller
         }
 
         $payload = [
-            'iss' => 'librarymanagementapi', // Issuer
+            'iss' => env('JWT_ISSUER'), // Issuer
             'sub' => $user[0]->id, // Subject (ID do usuário)
             'iat' => time(), // Time when JWT was issued
             'exp' => time() + 60 * 60 // Expiration time

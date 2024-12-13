@@ -8,7 +8,7 @@ $router->get('/', function () use ($router) {
 
 $router->post('/autenticate', 'UserController@authenticate');
 
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     $router->get('authors', 'AuthorController@index');
     $router->get("authors/{id}", 'AuthorController@show');
     $router->post("authors", 'AuthorController@store');
