@@ -31,7 +31,7 @@ class AuthorRepository implements AuthorRepositoryInterface
 
     public function findById(int $id)
     {
-        return $this->model->find($id);
+        return $this->model->find($id)->get();
     }
 
     public function create(array $data)

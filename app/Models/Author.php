@@ -18,7 +18,7 @@ class Author extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name', 'date_birth',
+        'id', 'name', 'date_birth',
     ];
 
     protected $dates = ['deleted_at'];

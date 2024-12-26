@@ -4,6 +4,7 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use Exception;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -17,7 +18,13 @@ class UserRepository implements UserRepositoryInterface
 
     public function findByUser(string $name, string $email)
     {
-        return $this->model->where('name', $name)->where('email', $email)->get();
+        $user = $this->model->where('name', $name)->where('email', $email)->get();
+
+        if (count($user) == 0) {
+            throw new Exception("User invalid.");
+        }
+
+        return $user;
     }
 
 }

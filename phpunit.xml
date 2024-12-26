@@ -1,17 +1,41 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true"
->
+         colors="true">
     <testsuites>
-        <testsuite name="Application Test Suite">
+        <!-- Testes gerais da pasta tests -->
+        <testsuite name="All Tests">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
+
+        <!-- Testes específicos da pasta tests/Unit -->
+        <testsuite name="Unit Tests">
+            <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+
+        <!-- Testes específicos da pasta tests/Unit/app/Services -->
+        <testsuite name="Unit Tests/Services">
+            <!-- <directory suffix="Test.php">./tests/Unit/app/Services</directory> -->
+        </testsuite>
     </testsuites>
+
     <php>
         <env name="APP_ENV" value="testing"/>
-        <env name="CACHE_DRIVER" value="array"/>
+        <env name="DB_CONNECTION" value="sqlite"/>
+        <env name="DB_DATABASE" value=":memory:"/>
+
+        <!-- <env name="CACHE_DRIVER" value="array"/> -->
         <env name="QUEUE_CONNECTION" value="sync"/>
+        <!-- <env name="SESSION_DRIVER" value="array"/> -->
     </php>
+
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">app/</directory>
+        </include>
+    </coverage>
+
+    <logging>
+        <log type="coverage-html" target="coverage/"/>
+    </logging>
 </phpunit>

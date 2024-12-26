@@ -28,8 +28,8 @@ class BookRequest
             $data,
             [
                 'title' => 'required|string',
-                'year_published' => 'required|integer',
-                'author_id' => 'required|integer|exists:books,id',
+                'year_published' => 'required|integer|digits:4|regex:/^[1-9][0-9]{3}$/|max:' . date('Y'),
+                'author_id' => 'required|integer|exists:authors,id',
             ]
         );
 

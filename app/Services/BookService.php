@@ -4,15 +4,20 @@ namespace App\Services;
 
 use App\DTOs\BookCreateDTOIN;
 use App\DTOs\BookDTOIN;
+use App\Helpers\ThrowHelper;
+use App\Repositories\Eloquent\AuthorRepository;
 use App\Repositories\Eloquent\BookRepository;
+use Exception;
 
 class BookService
 {
     private BookRepository $repository;
+    private AuthorRepository $authorRepository;
 
-    public function __construct(BookRepository $repository)
+    public function __construct(BookRepository $repository, AuthorRepository $authorRepository)
     {
         $this->repository = $repository;
+        $this->authorRepository = $authorRepository;
     }
 
     public function getBooks($perPage)
@@ -20,22 +25,36 @@ class BookService
         return $this->repository->getAll($perPage);
     }
 
-    public function getBook(BookDTOIN $BookDTOIN)
+    public function getBook(BookDTOIN $bookDTOIN)
     {
-        return $this->repository->findById($BookDTOIN->id);
+        $book = $this->repository->findById($bookDTOIN->id);
+
+        if (count($book) == 0) {
+            ThrowHelper::exception('Book not found');
+        }
+
+        return $book;
     }
 
-    public function createBook(BookCreateDTOIN $BookCreateDTOIN)
+    public function createBook(BookCreateDTOIN $bookCreateDTOIN)
     {
-        return $this->repository->create($BookCreateDTOIN->toArray());
+        return $this->repository->create($bookCreateDTOIN->toArray());
     }
 
-    public function updateBook(BookDTOIN $BookDTOIN, array $data)
+    public function updateBook(BookDTOIN $bookDTOIN, array $data)
     {
-        return $this->repository->update($BookDTOIN->id, $data);
+        if (empty($bookDTOIN->id)) {
+            ThrowHelper::exception('Book not found');
+        }
+
+        return $this->repository->update($bookDTOIN->id, $data);
     }
-    public function deleteBook(BookDTOIN $BookDTOIN)
+    public function deleteBook(BookDTOIN $bookDTOIN)
     {
-        return $this->repository->delete($BookDTOIN->id);
+        if (empty($bookDTOIN->id)) {
+            ThrowHelper::exception('Book not found');
+        }
+
+        return $this->repository->delete($bookDTOIN->id);
     }
 }
