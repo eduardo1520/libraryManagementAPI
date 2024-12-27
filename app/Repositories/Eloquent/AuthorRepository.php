@@ -31,7 +31,12 @@ class AuthorRepository implements AuthorRepositoryInterface
 
     public function findById(int $id)
     {
-        return $this->model->find($id)->get();
+        $author = $this->model->where('id', $id)->get();
+        if (!$author) {
+            return null;
+        }
+
+        return $author;
     }
 
     public function create(array $data)
@@ -55,8 +60,8 @@ class AuthorRepository implements AuthorRepositoryInterface
     {
         $author = $this->findById($id);
 
-        if ($author) {
-            $author->delete();
+        if (!$author->isEmpty()) {
+            $author[0]->delete();
             return true;
         }
 

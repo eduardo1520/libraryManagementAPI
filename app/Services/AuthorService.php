@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\DTOs\AuthorCreateDTOIN;
 use App\DTOs\AuthorDTOIN;
+use App\Helpers\ThrowHelper;
 use App\Repositories\Eloquent\AuthorRepository;
+use Exception;
 
 class AuthorService
 {
@@ -22,7 +24,13 @@ class AuthorService
 
     public function getAuthor(AuthorDTOIN $authorDTOIN)
     {
-        return $this->repository->findById($authorDTOIN->id);
+        $author = $this->repository->findById($authorDTOIN->id);
+
+        if (count($author) === 0) {
+            ThrowHelper::exception('Author not found');
+        }
+
+        return $author;
     }
 
     public function createAuthor(AuthorCreateDTOIN $authorCreateDTOIN)
@@ -31,6 +39,12 @@ class AuthorService
     }
     public function deleteAuthor(AuthorDTOIN $authorDTOIN)
     {
-        return $this->repository->delete($authorDTOIN->id);
+        $author = $this->repository->delete($authorDTOIN->id);
+
+        if (!$author) {
+            ThrowHelper::exception('Author not found');
+        }
+
+        return $author;
     }
 }

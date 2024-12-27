@@ -3,11 +3,13 @@
 namespace Tests\Unit\app\Services;
 
 use App\DTOs\AuthorCreateDTOIN;
+use App\DTOs\AuthorDTOIN;
 use App\Http\Requests\AuthorRequest;
 use App\Models\Author;
 use App\Repositories\Eloquent\AuthorRepository;
 use App\Services\AuthorService;
 use Carbon\Carbon;
+use Exception;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -76,4 +78,100 @@ class AuthorTest extends TestCase
         $this->assertStringContainsString('The date birth field is required', $validationError);
     }
 
+    public function test_should_find_all_authors()
+    {
+        $data = [
+            [
+                'name' => 'Paul Jack',
+                'date_birth' => '10/12/1980',
+            ],
+            [
+                'name' => 'Marly Lucy',
+                'date_birth' => '04/09/1990',
+            ],
+            [
+                'name' => 'Enzo Patrick',
+                'date_birth' => '02/05/1975',
+            ]
+        ];
+
+        array_walk($data, function($person) {
+            $this->authorCreateDTOIn = new AuthorCreateDTOIN($person['name'], Carbon::createFromFormat('d/m/Y', $person['date_birth']));
+            $this->authorService->createAuthor($this->authorCreateDTOIn);
+        });
+
+        $authors = $this->authorService->getAuthors(5);
+
+        $this->assertNotEmpty($authors);
+        $this->assertIsArray($authors);
+    }
+
+    public function test_should_find_one_author()
+    {
+        $data = [
+            'name' => 'Paul Jack',
+            'date_birth' => '10/12/1980',
+        ];
+
+        $this->authorCreateDTOIn = new AuthorCreateDTOIN($data['name'], Carbon::createFromFormat('d/m/Y', $data['date_birth']));
+
+        $newAuthor = $this->authorService->createAuthor($this->authorCreateDTOIn);
+
+        $author = $this->authorService->getAuthor(new AuthorDTOIN($newAuthor->id));
+
+        $this->assertInstanceOf(Author::class, $author[0]);
+        $this->assertNotEmpty($author);
+        $this->assertEquals($this->authorCreateDTOIn->name, $author[0]->name);
+        $this->assertEquals(Carbon::parse($this->authorCreateDTOIn->dateBirth)->format('d/m/Y'), $author[0]->date_birth);
+
+    }
+
+    public function test_should_find_one_failed_author()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Author not found');
+
+        $author = $this->authorService->getAuthor(new AuthorDTOIN(0));
+
+        $this->assertInstanceOf(Author::class, $author[0]);
+        $this->assertNotEmpty($author);
+        $this->assertEquals($this->authorCreateDTOIn->name, $author[0]->name);
+        $this->assertEquals(Carbon::parse($this->authorCreateDTOIn->dateBirth)->format('d/m/Y'), $author[0]->date_birth);
+
+    }
+
+    public function test_should_remove_author()
+    {
+        $data = [
+            'name' => 'Paul Jack',
+            'date_birth' => '10/12/1980',
+        ];
+
+        $this->authorCreateDTOIn = new AuthorCreateDTOIN($data['name'], Carbon::createFromFormat('d/m/Y', $data['date_birth']));
+
+        $newAuthor = $this->authorService->createAuthor($this->authorCreateDTOIn);
+
+        $removeAuthor = $this->authorService->deleteAuthor(new AuthorDTOIN($newAuthor->id));
+
+        $this->assertTrue($removeAuthor);
+    }
+
+    public function test_should_remove_failed_author()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Author not found');
+
+        $data = [
+            'name' => 'Paul Jack',
+            'date_birth' => '10/12/1980',
+        ];
+
+        $this->authorCreateDTOIn = new AuthorCreateDTOIN($data['name'], Carbon::createFromFormat('d/m/Y', $data['date_birth']));
+
+        $this->authorService->createAuthor($this->authorCreateDTOIn);
+
+        $removeAuthor = $this->authorService->deleteAuthor(new AuthorDTOIN(0));
+
+        $this->assertTrue($removeAuthor);
+    }
 }
