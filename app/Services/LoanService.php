@@ -40,6 +40,8 @@ class LoanService
         $loanDetails = $LoanCreateDTOIN->toArray();
 
         dispatch(new SendLoanEmail($user, $loanDetails));
+
+        return $loan;
     }
 
     public function updateLoan(LoanDTOIN $LoanDTOIN, array $data)

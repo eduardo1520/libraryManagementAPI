@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\UserCreateDTOIN;
 use App\DTOs\UserDTOIN;
 use App\Repositories\Eloquent\UserRepository;
 
@@ -17,6 +18,11 @@ class UserService
     public function getUser(UserDTOIN $authorDTOIN)
     {
         return $this->repository->findByUser($authorDTOIN->name, $authorDTOIN->email);
+    }
+
+    public function createUser(UserCreateDTOIN $userCreateDTOIN)
+    {
+        return $this->repository->create($userCreateDTOIN->toArray());
     }
 
 }

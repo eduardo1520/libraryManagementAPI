@@ -5,6 +5,9 @@ namespace App\Repositories\Eloquent;
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Exception;
+use Illuminate\Log\Logger;
+use InvalidArgumentException;
+use Symfony\Component\HttpKernel\Log\Logger as LogLogger;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -26,5 +29,11 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
+
+    public function create(array $user)
+    {
+        return $this->model->create($user);
+    }
+
 
 }
