@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\DTOs\LoanCreateDTOIN;
 use App\DTOs\LoanDTOIN;
+use App\DTOs\LoanUpdateDTOIN;
+use App\Helpers\ThrowHelper;
 use App\Jobs\SendLoanEmail;
 use App\Repositories\Eloquent\LoanRepository;
-use Illuminate\Support\Facades\Log;
 
 class LoanService
 {
@@ -29,11 +30,11 @@ class LoanService
 
     public function createLoan(LoanCreateDTOIN $LoanCreateDTOIN)
     {
-        $loan = $this->repository->create($LoanCreateDTOIN->toArray());
-
-        if (!$loan) {
-            return false;
+        if (empty($LoanCreateDTOIN->userId) || empty($LoanCreateDTOIN->bookId)) {
+            ThrowHelper::exception('Create failed loan.');
         }
+
+        $loan = $this->repository->create($LoanCreateDTOIN->toArray());
 
         $user = $loan->user;
 
@@ -44,9 +45,9 @@ class LoanService
         return $loan;
     }
 
-    public function updateLoan(LoanDTOIN $LoanDTOIN, array $data)
+    public function updateLoan(LoanUpdateDTOIN $loanUpdateDTOIN, array $data)
     {
-        return $this->repository->update($LoanDTOIN->id, $data);
+        return $this->repository->update($loanUpdateDTOIN->id, $data);
     }
     public function deleteLoan(LoanDTOIN $LoanDTOIN)
     {

@@ -49,7 +49,7 @@ class BookTest extends TestCase
             [
                 [
                     "title" => "Test Book",
-                    "year_published" => 2022,
+                    "year_published" => date('Y'),
                     "author_id" => 0
                 ],
                 "The selected author id is invalid."
@@ -81,7 +81,7 @@ class BookTest extends TestCase
             [
                 [
                     "title" => "Test Book5",
-                    "year_published" => 2024,
+                    "year_published" => date('Y'),
                     "author_id" => 1000
                 ],
                 "The selected author id is invalid."
@@ -92,12 +92,12 @@ class BookTest extends TestCase
                     "year_published" => 2030,
                     "author_id" => 1
                 ],
-                "The year published must not be greater than 2024."
+                "The year published must not be greater than " . date('Y')
             ],
             [
                 [
                     "title" => "",
-                    "year_published" => 2024,
+                    "year_published" => date('Y'),
                     "author_id" => 1
                 ],
                 "The title field is required."
@@ -184,7 +184,7 @@ class BookTest extends TestCase
         $this->assertInstanceOf(Book::class, $book[0]);
         $this->assertNotEmpty($book);
         $this->assertEquals($book[0]->title, 'Big Data');
-        $this->assertEquals($book[0]->yearPublished, '2024');
+        $this->assertEquals($book[0]->yearPublished, date('Y'));
     }
 
     public function test_should_update_book()
